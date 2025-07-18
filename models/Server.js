@@ -1,9 +1,12 @@
 const express = require('express');
-
+const cors = require('cors');
 class Server {
     constructor() {
         //Express
         this.app = express();
+
+        //Puerto
+        this.port=process.env.PORT;
 
         //Paths
         this.usuariosPath = '/api/usuarios';
@@ -15,6 +18,9 @@ class Server {
         this.routes();
     }
     middlewares() {
+        //CORS
+        this.app.use(cors());
+        //Lectura y parseo del body
         this.app.use(express.json());
 
     //Mostrar carpeta publica
@@ -25,7 +31,7 @@ class Server {
     };
 
     listen() {
-        this.app.listen(3000, () => {
+        this.app.listen(this.port, () => {
             console.log('Server running on port', 3000);
         });
     } 
