@@ -1,6 +1,6 @@
 const {Router}= require('express');
 const router = Router();
-const {usuariosGet, usuariosPost, usuariosPut} = require('../Controllers/usuariosCtrl.js');
+const {usuariosGet, usuariosPost, usuariosPut , usuariosDelete} = require('../Controllers/usuariosCtrl.js');
 
 //RUTA GET
 router.get('/', usuariosGet);
