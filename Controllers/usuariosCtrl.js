@@ -1,4 +1,5 @@
 const {response , request } = require('express');
+const bcrypt = require('bcryptjs');
 
 //Controlador GET
 const usuariosGet = (req = request, res = response) => {
@@ -15,7 +16,10 @@ const usuariosGet = (req = request, res = response) => {
 //Controlador POST
 const usuariosPost = (req = request, res = response) => {
     const datos = req.body;
-    /* const {nombre, correo , password, rol} = datos; */
+    const {nombre, correo , password, rol} = datos; 
+
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
     res.json (
         {
             datos ,
