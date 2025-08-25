@@ -12,6 +12,9 @@ class Server {
         //Paths
         this.usuariosPath = '/api/usuarios';
 
+        //Conectar a base de datos
+        this.connectDB();
+
         //Middlewares
         this.middlewares();
 
