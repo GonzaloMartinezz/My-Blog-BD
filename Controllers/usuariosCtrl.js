@@ -42,10 +42,22 @@ const usuariosPost = async (req = request, res = response) => {
 };
 
 //Controlador PUT
-const usuariosPut = (req = request, res = response) => {
+const usuariosPut = async (req = request, res = response) => {
+    const id = req.params.id;
+
+    const {password, ...updUsuario} = req.body;
+    if (password) {
+        //emcriptar contraseña 
+
+        const salt = bcrypt.genSaltSync(10);
+        updUsuario.password = bcrypt.hashSync(password, salt);
+    }
+
+    const usuario = await Usuario.findByIdAndUpdate(id, updUsuario , {new: true});
     res.json (
         {
             mensaje:"Modifico el mensaje",
+            usuario
         }
     )
 };
