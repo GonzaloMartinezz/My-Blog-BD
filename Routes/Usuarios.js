@@ -10,6 +10,6 @@ router.post('/', usuariosPost)
 //RUTA PUT--update
 router.put('/:id', usuariosPut) 
 //RUTA DELETE
-router.delete('/', usuariosDelete)
+router.delete('/:id', usuariosDelete)
 
 module.exports = router;    

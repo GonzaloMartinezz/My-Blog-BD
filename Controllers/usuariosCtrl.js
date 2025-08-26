@@ -1,4 +1,5 @@
 const {response , request } = require('express');
+const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
 
 //Controlador GET
@@ -14,16 +15,28 @@ const usuariosGet = (req = request, res = response) => {
 };
 
 //Controlador POST
-const usuariosPost = (req = request, res = response) => {
+const usuariosPost = async (req = request, res = response) => {
+
+    //frontend
     const datos = req.body;
     const {nombre, correo , password, rol} = datos; 
 
+    //backend
+    const usuario = new Usuario({nombre, correo , password, rol});
+
+//emcriptar contraseña
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
+   /*  const hash = bcrypt.hashSync(password, salt);
+    usuario.password = hash; */
+    usuario.password = bcrypt.hashSync(password, salt);
+
+    //guardar en BD
+    await usuario.save();
+
     res.json (
         {
-            datos ,
-            mensaje:"Envio el mensaje",
+            usuario ,
+            mensaje:"Usuario registrado!",
         }
     )
 };
