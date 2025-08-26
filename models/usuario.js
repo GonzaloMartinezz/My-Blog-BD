@@ -17,13 +17,19 @@ const UsuarioSchema = Schema ({
     rol: {
         type: String,
         required: (true , 'Este dato es obligatorio!'),
-        enum: ['ADMIN_ROLE' , 'USER_ROLE'],
-        default: 'USER_ROLE'
+       /*  enum: ['ADMIN_ROLE' , 'USER_ROLE'],
+        default: 'USER_ROLE' */
     },
     estado: {
         type: Boolean,
         default: true,
     }
 });
+
+//Quitar datos de la respuesta
+UsuarioSchema.methods.toJSON = function () {
+    const {password , __v, ...usuario} = this.toObject();
+    return usuario;
+}
 
 module.exports = model('Usuario', UsuarioSchema);
