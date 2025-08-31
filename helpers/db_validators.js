@@ -9,8 +9,8 @@ const esMailValido = async (correo = '') => {
 
 const esRolValido = async (rol = '') => {
     const exiteRol = await Rol.findOne({rol});
-    if (exiteRol) {
-        throw new Error(`El rol ${rol} no existe`);
+    if (!exiteRol) {
+        throw new Error(`El rol ${rol}no existe en la base de datos`);
     }
 };
 
