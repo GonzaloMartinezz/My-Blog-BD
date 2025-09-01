@@ -28,13 +28,13 @@ router.post(
 
 //RUTA PUT--update\
 router.put('/:id',
-
-    [check('id' , 'No es un ID valido').isMongoId(),
+    [
+    check('id' , 'No es un ID valido').isMongoId(),
     check('id').custom(esIdValido),
     validarCampos,
     ],
-     usuariosPut
-    ) 
+     usuariosPut,
+    ) ;
 
 //RUTA DELETE
 router.delete('/:id', usuariosDelete)

@@ -43,7 +43,7 @@ const usuariosPost = async (req = request, res = response) => {
 
 //Controlador PUT
 const usuariosPut = async (req = request, res = response) => {
-    const id = req.params.id;
+    const {id} = req.params;
 
     const {password, ...updUsuario} = req.body;
     if (password) {
@@ -53,7 +53,7 @@ const usuariosPut = async (req = request, res = response) => {
         updUsuario.password = bcrypt.hashSync(password, salt);
     }
 
-    const usuario = await Usuario.findByIdAndUpdate(id, updUsuario , {new: true});
+    const usuario = await Usuario.findByIdAndUpdate(id, updUsuario , {new: true,});
     res.json (
         {
             mensaje:"Modifico el mensaje",
@@ -72,8 +72,8 @@ const usuariosDelete = (req = request, res = response) => {
 };
 
 module.exports = {
-    usuariosGet ,
-    usuariosPost , 
-    usuariosPut ,
-    usuariosDelete
+    usuariosGet,
+    usuariosPost, 
+    usuariosPut,
+    usuariosDelete,
 }
