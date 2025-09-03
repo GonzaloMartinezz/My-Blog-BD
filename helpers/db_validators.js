@@ -17,7 +17,7 @@ const esRolValido = async (rol) => {
 };
 
 const esIdValido = async (Id ) => {
-    const exiteUsuario = await Usuario.findById({Id});
+    const exiteUsuario = await Usuario.findById(Id);
     if (!exiteUsuario) {
         throw new Error(`El Id ${Id}no existe en la base de datos`);
     }

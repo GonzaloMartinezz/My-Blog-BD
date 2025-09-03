@@ -1,14 +1,33 @@
 const {response , request } = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
+const e = require('express');
 
 //Controlador GET
-const usuariosGet = (req = request, res = response) => {
-    const {limit , Key} = req.query;
+const usuariosGet = async (req = request, res = response) => {
+    /* const {limit , Key} = req.query; */
+
+    //pedido de lista completa 
+   /*  const usuarios = await Usuario.find(); */
+   const {desde = 0 , limite = 0} = req.query;
+
+   const estadoTrue = {estado : true};
+ /*   const usuarios = await Usuario.find().skip(Number(desde)).limit(Number(limite));
+   const total = await Usuario.countDocuments(); */
+
+
+       //optimizacion de respuesta
+   const [total ,usuarios] = await Promise.all ([
+    Usuario.countDocuments(estadoTrue),
+    Usuario.find(estadoTrue).skip(desde).limit(limite),
+
+   ])
     res.json (
         {
-            mensaje:"recibo el mensaje",
-            limit,
+            mensaje:"Lista de usuarios",
+            usuarios,
+            total,
+            /* limit */
            /*  Key , */
         }
     )

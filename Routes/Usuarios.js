@@ -6,7 +6,7 @@ const {usuariosGet, usuariosPost, usuariosPut , usuariosDelete} = require('../Co
 const { esMailValido , esRolValido , esIdValido} = require('../helpers/db_validators');
 
 //RUTA GET
-router.get('/', usuariosGet);
+router.get('/',usuariosGet);
 
 //RUTA POST -- registrer
 
