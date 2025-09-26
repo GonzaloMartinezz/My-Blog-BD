@@ -1,34 +1,32 @@
-const {response , request } = require('express');
+const { response, request } = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
 const e = require('express');
 
 //Controlador GET
 const usuariosGet = async (req = request, res = response) => {
-    /* const {limit , Key} = req.query; */
 
     //pedido de lista completa 
-   /*  const usuarios = await Usuario.find(); */
-   const {desde = 0 , limite = 0} = req.query;
+    /*   const usuarios = await Usuario.find(); */
+    const { desde = 0, limite = 0 } = req.query;
 
-   const estadoTrue = {estado : true};
- /*   const usuarios = await Usuario.find().skip(Number(desde)).limit(Number(limite));
-   const total = await Usuario.countDocuments(); */
+    const estadoTrue = { estado: true };
+
+  /*   const usuarios = await Usuario.find().skip(Number(desde)).limit(Number(limite));
+    const total = await Usuario.countDocuments(); */
 
 
-       //optimizacion de respuesta
-   const [total ,usuarios] = await Promise.all ([
-    Usuario.countDocuments(estadoTrue),
-    Usuario.find(estadoTrue).skip(desde).limit(limite),
-
-   ])
-    res.json (
+    //optimizacion de respuesta
+        const [total, usuarios] = await Promise.all([
+          Usuario.countDocuments(estadoTrue),
+          Usuario.find(estadoTrue).skip(desde).limit(limite),
+  
+       ]) 
+    res.json(
         {
-            mensaje:"Lista de usuarios",
-            usuarios,
+            mensaje: "Lista de usuarios",
             total,
-            /* limit */
-           /*  Key , */
+            usuarios,
         }
     )
 };
@@ -38,33 +36,33 @@ const usuariosPost = async (req = request, res = response) => {
 
     //frontend
     const datos = req.body;
-    const {nombre, correo , password, rol} = datos; 
+    const { nombre, correo, password, rol } = datos;
 
     //backend
-    const usuario = new Usuario({nombre, correo , password, rol});
+    const usuario = new Usuario({ nombre, correo, password, rol });
 
-//emcriptar contraseña
+    //emcriptar contraseña
     const salt = bcrypt.genSaltSync(10);
-   /*  const hash = bcrypt.hashSync(password, salt);
-    usuario.password = hash; */
+    /*  const hash = bcrypt.hashSync(password, salt);
+     usuario.password = hash; */
     usuario.password = bcrypt.hashSync(password, salt);
 
     //guardar en BD
     await usuario.save();
 
-    res.json (
+    res.json(
         {
-            usuario ,
-            mensaje:"Usuario registrado!",
+            usuario,
+            mensaje: "Usuario registrado!",
         }
     )
 };
 
 //Controlador PUT
 const usuariosPut = async (req = request, res = response) => {
-    const {id} = req.params;
+    const { id } = req.params;
 
-    const {password, ...updUsuario} = req.body;
+    const { password, ...updUsuario } = req.body;
     if (password) {
         //emcriptar contraseña 
 
@@ -72,10 +70,10 @@ const usuariosPut = async (req = request, res = response) => {
         updUsuario.password = bcrypt.hashSync(password, salt);
     }
 
-    const usuario = await Usuario.findByIdAndUpdate(id, updUsuario , {new: true,});
-    res.json (
+    const usuario = await Usuario.findByIdAndUpdate(id, updUsuario, { new: true, });
+    res.json(
         {
-            mensaje:"Modifico el mensaje",
+            mensaje: "Modifico el mensaje",
             usuario
         }
     )
@@ -83,16 +81,16 @@ const usuariosPut = async (req = request, res = response) => {
 
 //Controlador DELETE
 const usuariosDelete = (req = request, res = response) => {
-    res.json (
+    res.json(
         {
-            mensaje:"Elimino el mensaje",
+            mensaje: "Elimino el mensaje",
         }
     )
 };
 
 module.exports = {
     usuariosGet,
-    usuariosPost, 
+    usuariosPost,
     usuariosPut,
     usuariosDelete,
 }
