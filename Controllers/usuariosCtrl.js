@@ -2,6 +2,7 @@ const { response, request } = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
 const e = require('express');
+const usuario = require('../models/usuario');
 
 //Controlador GET
 const usuariosGet = async (req = request, res = response) => {
@@ -80,10 +81,31 @@ const usuariosPut = async (req = request, res = response) => {
 };
 
 //Controlador DELETE
-const usuariosDelete = (req = request, res = response) => {
+const usuariosDelete =  async (req = request, res = response) => {
+     const { id } = req.params;
+
+     /* const usuarioEliminado = await Usuario.findByIdAndDelete(id); */
+
+    //verificar estado
+     if (!usuario.estado) {
+       return res.json({
+             mensaje: `El Estado ya esta inactivo!
+         })`
+         }); 
+      } 
+
+     //cambiar el valor del estado
+
+     const usuarioInactivo = await Usuario.findByIdAndUpdate(id,
+        { estado: false },
+        { new: true }
+    ); 
+
     res.json(
         {
-            mensaje: "Elimino el mensaje",
+            mensaje: "Elimino datos",
+             usuarioInactivo 
+            /* usuarioEliminado */
         }
     )
 };
