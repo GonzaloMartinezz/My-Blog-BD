@@ -7,10 +7,15 @@ class Server {
         this.app = express();
 
         //Puerto
-        this.port=process.env.PORT;
+        this.port = process.env.PORT;
 
         //Paths
+
+        //Usuarios
         this.usuariosPath = '/api/usuarios';
+
+        //login
+        this.authPath = '/api/auth';
 
         //Conectar a base de datos
         this.connectDB();
@@ -33,19 +38,20 @@ class Server {
         //Lectura y parseo del body
         this.app.use(express.json());
 
-    //Mostrar carpeta publica
-    this.app.use(express.static('public')); 
+        //Mostrar carpeta publica
+        this.app.use(express.static('public'));
     };
     routes() {
-       this.app.use(this.usuariosPath, require('../Routes/Usuarios'));
+        this.app.use(this.usuariosPath, require('../Routes/Usuarios'));
+        this.app.use(this.authPath, require('../Routes/auth'));
     };
 
     listen() {
         this.app.listen(this.port, () => {
             console.log('Server running on port', this.port);
         });
-    } 
-   
+    }
+
 }
 
 module.exports = Server;
