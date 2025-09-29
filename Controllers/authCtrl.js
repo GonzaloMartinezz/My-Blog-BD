@@ -1,59 +1,54 @@
 const { response, request } = require('express');
 const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
-const { generarJW } = require('../helpers/generar-jwt');
+const { generarJWT } = require('../helpers/generar-jwt');
 
 const login = async (req = request, res = response) => {
     const { correo, password } = req.body;
 
-
     try {
-        //validar en correo
+        // 1. Verificar si el correo existe
         const usuario = await Usuario.findOne({ correo });
 
         if (!usuario) {
             return res.status(400).json({
-                msg: "Correo o contraseña incorrectos!"
+                msg: "Correo o contraseña incorrectos!"
             });
         }
 
-        //validar estado
+        // 2. Verificar si el usuario está activo
         if (!usuario.estado) {
             return res.status(400).json({
                 msg: "Usuario inactivo!"
             });
         }
 
-        //validar password
-        //encriptacion
+        // 3. Verificar la contraseña
         const validPassword = bcrypt.compareSync(password, usuario.password);
-        validacion
+        
         if (!validPassword) {
             return res.status(400).json({
-                msg: "Correo o contraseña incorrectos!"
-            })
-
+                msg: "Correo o contraseña incorrectos!"
+            });
         }
 
-        //generar JWT
-        const token = await generarJW(usuario.id);
+        // 4. Generar el JWT (token de autenticación)
+        const token = await generarJWT(usuario.id);
 
-        //respuesta del backend
         res.json({
-            msg: "LogIn OK",
+            msg: "Login OK!",
             usuario,
             token
+        });
 
- });
-
-    }catch (error) {
+    } catch (error) {
         console.log(error);
         return res.status(500).json({
-            msg: "Problemas internos del servidor"
+            msg: "Problemas internos del servidor. Hable con el administrador."
         });
     }
-
 }
+
 module.exports = {
     login
 }

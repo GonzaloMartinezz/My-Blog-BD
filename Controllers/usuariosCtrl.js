@@ -3,6 +3,8 @@ const Usuario = require('../models/usuario');
 const bcrypt = require('bcryptjs');
 const e = require('express');
 const usuario = require('../models/usuario');
+const { validarJWT } = require('../middlewares/validar_jwt');
+const { esMailValido, esRolValido, esIdValido } = require('../helpers/db_validators');
 
 //Controlador GET
 const usuariosGet = async (req = request, res = response) => {
@@ -80,16 +82,23 @@ const usuariosPut = async (req = request, res = response) => {
     )
 };
 
+
+
 //Controlador DELETE
 const usuariosDelete =  async (req = request, res = response) => {
      const { id } = req.params;
 
+    const usuarioAdmin = await Usuario.findById(id);
+    
+
      /* const usuarioEliminado = await Usuario.findByIdAndDelete(id); */
+
+     const usuario = await Usuario.findById(id);
 
     //verificar estado
      if (!usuario.estado) {
        return res.json({
-             mensaje: `El Estado ya esta inactivo!
+             mensaje: `El usuario ${id} ya esta inactivo!
          })`
          }); 
       } 
@@ -101,11 +110,13 @@ const usuariosDelete =  async (req = request, res = response) => {
         { new: true }
     ); 
 
+
+
     res.json(
         {
-            mensaje: "Elimino datos",
-             usuarioInactivo 
-            /* usuarioEliminado */
+            mensaje: "Datos eliminados",
+            usuarioInactivo,
+            usuarioAdmin ,
         }
     )
 };
