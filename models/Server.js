@@ -17,6 +17,9 @@ class Server {
         //login
         this.authPath = '/api/auth';
 
+        //Categorias
+        this.categoriasPath = '/api/categorias';
+        
         //Conectar a base de datos
         this.connectDB();
 

@@ -10,7 +10,10 @@ const router = Router();
 
 
 //RUTA GET
-router.get('/', usuariosGet);
+router.get('/', [validarJWT , esAdminRol], usuariosGet);
+
+//RUTA GET - Usuario
+router.get('/:id', [validarJWT], usuariosGet);
 
 //RUTA POST -- registrer
 
@@ -33,6 +36,7 @@ router.post(
 //RUTA PUT--update\
 router.put('/:id',
     [
+        validarJWT ,
         check('id', 'No es un ID valido').isMongoId(),
         check('id').custom(esIdValido),
         validarCampos,
